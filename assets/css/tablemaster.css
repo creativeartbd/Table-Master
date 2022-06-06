@@ -1,0 +1,16 @@
+.table-master {
+  z-index: 999;
+}
+
+.table-master ul {
+  margin: 0;
+  padding: 0;
+}
+
+.table-master ul li {
+  list-style: none;
+}
+
+.table-master ul li a {
+  display: block;
+}
