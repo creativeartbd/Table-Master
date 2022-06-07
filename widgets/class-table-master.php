@@ -16,6 +16,7 @@ namespace TableMaster\Widgets;
 
 use Elementor\Widget_Base;
 use Elementor\Controls_Manager;
+use Shuchkin\SimpleXLSX;
 
 // Security Note: Blocks direct access to the plugin PHP files.
 defined( 'ABSPATH' ) || die();
@@ -1031,6 +1032,16 @@ class TableMaster extends Widget_Base {
 		$this->add_inline_editing_attributes( 'description', 'basic' );
 		$this->add_inline_editing_attributes( 'content', 'advanced' );
 
+		// echo plugin_dir_path( dirname( __FILE__ ) );
+		$excel_file = isset( $settings['sh_file_upload_excel']['url'] ) ? $settings['sh_file_upload_excel']['url'] : '';
+		if( $excel_file ) {
+			$file_id = $settings['sh_file_upload_excel']['id'];
+			$plugin_dir = WP_PLUGIN_DIR . '/table-master/';
+			require_once $plugin_dir.'lib/SimpleXLSX.php';
+			$attached_file = get_attached_file( $file_id );
+		}
+		
+
 		$sh_details_heading_title = $settings['sh_details_heading_title'];
 		$sh_data_heading_title = $settings['sh_data_heading_title'];
 		$sh_table_info = $settings['sh_table_info'];
@@ -1046,31 +1057,63 @@ class TableMaster extends Widget_Base {
 		<?php
 
 		if( !empty( $sh_details_heading_title ) && !empty( $sh_data_heading_title) ) {
-			echo "<div class='sh_table_master'>";
-			echo "<table>";
-				echo "<thead>";
-					echo "<tr>";
-						echo "<th>$sh_details_heading_title</th>";
-						echo "<th>$sh_data_heading_title</th>";
-					echo "</tr>";
-				echo "</thead>";
-				echo "<tbody>";
-				if( !empty( $sh_table_info ) ) {
 
-					foreach( $sh_table_info as $sh_info ) {
-
-						$sh_details_title = $sh_info['sh_details_title'];
-						$sh_data_description = $sh_info['sh_data_description'];
-
-						echo "<tr>";
-							echo "<td>$sh_details_title</td>";
-							echo "<td>$sh_data_description</td>";
-						echo "</tr>";
-					}
+			if( $excel_file ) {
+				if ($xlsx = SimpleXLSX::parse( $attached_file ) ) {
+					$results = $xlsx->rows();
+					echo "<div class='sh_table_master'>";
+					echo "<table>";
+						echo "<thead>";
+							echo "<tr>";
+								foreach( $results[0] as $key => $result ) {
+									echo "<th>$result</th>";
+								}
+							echo "</tr>";
+						echo "</thead>";
+	
+						unset( $results[0] );
+						
+						echo "<tbody>";
+						foreach( $results as $key => $value ) {
+							echo "<tr>";
+								foreach( $value as $val ) {
+									echo "<td>$val</td>";
+								}	
+							echo "</tr>";
+						}
+						echo "</tbody>";
+					echo "</table>";
+					echo "</div>";
+				} else {
+					echo SimpleXLSX::parseError();
 				}
-				echo "</tbody>";
-			echo "</table>";
-			echo "</div>";
+			} else {
+				echo "<div class='sh_table_master'>";
+					echo "<table>";
+						echo "<thead>";
+							echo "<tr>";
+								echo "<th>$sh_details_heading_title</th>";
+								echo "<th>$sh_data_heading_title</th>";
+							echo "</tr>";
+						echo "</thead>";
+						echo "<tbody>";
+						if( !empty( $sh_table_info ) ) {
+
+							foreach( $sh_table_info as $sh_info ) {
+
+								$sh_details_title = $sh_info['sh_details_title'];
+								$sh_data_description = $sh_info['sh_data_description'];
+
+								echo "<tr>";
+									echo "<td>$sh_details_title</td>";
+									echo "<td>$sh_data_description</td>";
+								echo "</tr>";
+							}
+						}
+						echo "</tbody>";
+					echo "</table>";
+				echo "</div>";
+			}			
 		}
 	}
 }
