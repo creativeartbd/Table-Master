@@ -198,7 +198,7 @@ class TableMaster extends Widget_Base {
 		$this->end_controls_section();
 
 		$this->start_controls_section(
-			'style_section',
+			'sh_table_heading',
 			[
 				'label' => esc_html__( 'Heading', 'table-master' ),
 				'tab' => \Elementor\Controls_Manager::TAB_STYLE,
@@ -463,7 +463,553 @@ class TableMaster extends Widget_Base {
 
 		$this->end_controls_tabs();
 
-		
+		$this->end_controls_section();
+
+		$this->start_controls_section(
+			'sh_table_body',
+			[
+				'label' => esc_html__( 'Body', 'table-master' ),
+				'tab' => \Elementor\Controls_Manager::TAB_STYLE,
+			]
+		);
+
+		$this->add_responsive_control(
+			'sh_body_alignment',
+			[
+				'label' => esc_html__( 'Body Alignment', 'plugin-name' ),
+				'type' => \Elementor\Controls_Manager::CHOOSE,
+				'options' => [
+					'left' => [
+						'title' => esc_html__( 'Left', 'plugin-name' ),
+						'icon' => 'eicon-text-align-left',
+					],
+					'center' => [
+						'title' => esc_html__( 'Center', 'plugin-name' ),
+						'icon' => 'eicon-text-align-center',
+					],
+					'right' => [
+						'title' => esc_html__( 'Right', 'plugin-name' ),
+						'icon' => 'eicon-text-align-right',
+					],
+				],
+				'default' => 'center',
+				'toggle' => true,
+				'selectors' => [
+					'{{WRAPPER}} .sh_table_master table tbody tr td' => 'text-align : {{VALUE}};',
+				],
+				// 'selector' => '{{WRAPPER}} .sh_table_master table thead tr th',
+			]
+		);
+
+		$this->add_group_control(
+			\Elementor\Group_Control_Typography::get_type(),
+			[
+				'name' => 'sh_body_typography',
+				'selector' => '{{WRAPPER}} .sh_table_master table tbody tr td',
+			]
+		);
+
+		$this->add_control(
+			'more_options',
+			[
+				'label' => esc_html__( 'Body text color', 'plugin-name' ),
+				'type' => \Elementor\Controls_Manager::HEADING,
+				'separator' => 'before',
+			]
+		);
+
+		$this->start_controls_tabs(
+			'sh_body_color_tabs'
+		);
+
+			$this->start_controls_tab(
+				'sh_body_title_normal_tab',
+				[
+					'label' => esc_html__( 'Normal', 'plugin-name' ),
+				]
+			);
+
+			$this->add_control(
+				'sh_body_title_normal_color',
+				[
+					'label' => esc_html__( 'Body text color', 'plugin-name' ),
+					'type' => \Elementor\Controls_Manager::COLOR,
+					'selectors' => [
+						'{{WRAPPER}} .sh_table_master table tbody tr td' => 'color: {{VALUE}}',
+					],
+				]
+			);
+
+			$this->end_controls_tab();
+
+			$this->start_controls_tab(
+				'sh_body_title_hover_tab',
+				[
+					'label' => esc_html__( 'Hover', 'plugin-name' ),
+				]
+			);
+
+			$this->add_control(
+				'sh_body_title_hover_color',
+				[
+					'label' => esc_html__( 'Body text color', 'plugin-name' ),
+					'type' => \Elementor\Controls_Manager::COLOR,
+					'selectors' => [
+						'{{WRAPPER}} .sh_table_master table tbody tr td:hover' => 'color: {{VALUE}}',
+					],
+				]
+			);
+	
+			$this->end_controls_tab();
+
+		$this->end_controls_tabs();
+
+		$this->add_group_control(
+			\Elementor\Group_Control_Text_Shadow::get_type(),
+			[
+				'name' => 'sh_body_shadow',
+				'label' => esc_html__( 'Border text shadow', 'plugin-name' ),
+				'selector' => '{{WRAPPER}} .sh_table_master table tbody tr td',
+			]
+		);
+
+		$this->start_controls_tabs(
+			'sh_body_background_tabs'
+		);
+
+			$this->start_controls_tab(
+				'sh_body_background_normal_tab',
+				[
+					'label' => esc_html__( 'Normal', 'plugin-name' ),
+				]
+			);
+
+			$this->add_group_control(
+				\Elementor\Group_Control_Background::get_type(),
+				[
+					'name' => 'sh_normal_body_background',
+					'label' => esc_html__( 'Body Background Color', 'plugin-name' ),
+					'types' => [ 'classic', 'gradient' ],
+					'selector' => '{{WRAPPER}} .sh_table_master table tbody tr td',
+				]
+			);
+
+			$this->end_controls_tab();
+
+			$this->start_controls_tab(
+				'sh_body_background_hover_tab',
+				[
+					'label' => esc_html__( 'Hover', 'plugin-name' ),
+				]
+			);
+
+			$this->add_group_control(
+				\Elementor\Group_Control_Background::get_type(),
+				[
+					'name' => 'sh_body_hover_background',
+					'label' => esc_html__( 'Body Background Hover Color', 'plugin-name' ),
+					'types' => [ 'classic', 'gradient' ],
+					'selector' => '{{WRAPPER}} .sh_table_master table tbody tr td:hover',
+				]
+			);
+
+			$this->end_controls_tab();
+
+		$this->end_controls_tabs();
+
+		$this->start_controls_tabs(
+			'sh_body_opacity_tabs'
+		);
+
+			$this->start_controls_tab(
+				'sh_body_opacity_normal_tab',
+				[
+					'label' => esc_html__( 'Normal', 'plugin-name' ),
+				]
+			);
+
+			$this->add_responsive_control(
+				'sh_body_normal_opacity',
+				[
+					'label' => esc_html__( 'Body Text Opacity', 'navigate-master' ),
+					'type' => \Elementor\Controls_Manager::SLIDER,
+					'size_units' => [ 'px', '%' ],
+					'range' => [
+						'px' => [
+							'min' => 0,
+							'max' => 1,
+							'step' => .1,
+						],
+					],
+					'selectors' => [
+						'{{WRAPPER}} .sh_table_master table tbody tr td' => 'opacity: {{SIZE}};',
+					],
+				]
+			);
+	
+			$this->end_controls_tab();
+
+			$this->start_controls_tab(
+				'sh_body_opacity_hover_tab',
+				[
+					'label' => esc_html__( 'Hover', 'plugin-name' ),
+				]
+			);
+
+			$this->add_responsive_control(
+				'sh_body_hover_opacity',
+				[
+					'label' => esc_html__( 'Body Text Opacity', 'navigate-master' ),
+					'type' => \Elementor\Controls_Manager::SLIDER,
+					'size_units' => [ 'px', '%' ],
+					'range' => [
+						'px' => [
+							'min' => 0,
+							'max' => 1,
+							'step' => .1,
+						],
+					],
+					'selectors' => [
+						'{{WRAPPER}} .sh_table_master table tbody tr td:hover' => 'opacity: {{SIZE}};',
+					],
+				]
+			);
+	
+
+			$this->end_controls_tab();
+
+		$this->end_controls_tabs();
+
+		$this->start_controls_tabs(
+			'sh_body_border_tabs'
+		);
+
+			$this->start_controls_tab(
+				'sh_body_border_normal_tab',
+				[
+					'label' => esc_html__( 'Normal', 'plugin-name' ),
+				]
+			);
+
+			$this->add_group_control(
+				\Elementor\Group_Control_Border::get_type(),
+				[
+					'name' => 'sh_body_normal_border',
+					'label' => esc_html__( 'Body Text Border', 'plugin-name' ),
+					'selector' => '{{WRAPPER}} .sh_table_master table tbody tr td',
+				]
+			);
+
+			$this->end_controls_tab();
+
+			$this->start_controls_tab(
+				'sh_body_border_hover_tab',
+				[
+					'label' => esc_html__( 'Hover', 'plugin-name' ),
+				]
+			);
+
+			$this->add_group_control(
+				\Elementor\Group_Control_Border::get_type(),
+				[
+					'name' => 'sh_body_hover_border',
+					'label' => esc_html__( 'Body Text Hover Border', 'plugin-name' ),
+					'selector' => '{{WRAPPER}} .sh_table_master table tbody tr td:hover',
+				]
+			);
+
+			$this->end_controls_tab();
+
+		$this->end_controls_tabs();
+	
+		$this->end_controls_section();
+
+
+		/* ===============
+		First Column styles
+		*=================*/
+
+		$this->start_controls_section(
+			'sh_table_first_column',
+			[
+				'label' => esc_html__( 'First Column', 'table-master' ),
+				'tab' => \Elementor\Controls_Manager::TAB_STYLE,
+			]
+		);
+
+		$this->add_responsive_control(
+			'sh_first_column_alignment',
+			[
+				'label' => esc_html__( 'First Column Alignment', 'plugin-name' ),
+				'type' => \Elementor\Controls_Manager::CHOOSE,
+				'options' => [
+					'left' => [
+						'title' => esc_html__( 'Left', 'plugin-name' ),
+						'icon' => 'eicon-text-align-left',
+					],
+					'center' => [
+						'title' => esc_html__( 'Center', 'plugin-name' ),
+						'icon' => 'eicon-text-align-center',
+					],
+					'right' => [
+						'title' => esc_html__( 'Right', 'plugin-name' ),
+						'icon' => 'eicon-text-align-right',
+					],
+				],
+				'default' => 'center',
+				'toggle' => true,
+				'selectors' => [
+					'{{WRAPPER}} .sh_table_master table tbody tr td:first-child' => 'text-align : {{VALUE}} !important;',
+				],
+				// 'selector' => '{{WRAPPER}} .sh_table_master table thead tr th',
+			]
+		);
+
+		$this->add_group_control(
+			\Elementor\Group_Control_Typography::get_type(),
+			[
+				'name' => 'sh_first_column_typography',
+				'selector' => '{{WRAPPER}} .sh_table_master table tr td:first-child',
+			]
+		);
+
+		$this->add_control(
+			'first_column_more_options',
+			[
+				'label' => esc_html__( 'First column text color', 'plugin-name' ),
+				'type' => \Elementor\Controls_Manager::HEADING,
+				'separator' => 'before',
+			]
+		);
+
+		$this->start_controls_tabs(
+			'sh_first_column_color_tabs'
+		);
+
+			$this->start_controls_tab(
+				'sh_first_column_title_normal_tab',
+				[
+					'label' => esc_html__( 'Normal', 'plugin-name' ),
+				]
+			);
+
+			$this->add_control(
+				'sh_first_column_title_normal_color',
+				[
+					'label' => esc_html__( 'Body text color', 'plugin-name' ),
+					'type' => \Elementor\Controls_Manager::COLOR,
+					'selectors' => [
+						'{{WRAPPER}} .sh_table_master table tr td:first-child' => 'color: {{VALUE}}',
+					],
+				]
+			);
+
+			$this->end_controls_tab();
+
+			$this->start_controls_tab(
+				'sh_first_column_title_hover_tab',
+				[
+					'label' => esc_html__( 'Hover', 'plugin-name' ),
+				]
+			);
+
+			$this->add_control(
+				'sh_first_column_title_hover_color',
+				[
+					'label' => esc_html__( 'Body text color', 'plugin-name' ),
+					'type' => \Elementor\Controls_Manager::COLOR,
+					'selectors' => [
+						'{{WRAPPER}} .sh_table_master table tr td:first-child:hover' => 'color: {{VALUE}}',
+					],
+				]
+			);
+	
+			$this->end_controls_tab();
+
+		$this->end_controls_tabs();
+
+		$this->add_group_control(
+			\Elementor\Group_Control_Text_Shadow::get_type(),
+			[
+				'name' => 'sh_first_column_shadow',
+				'label' => esc_html__( 'First column text shadow', 'plugin-name' ),
+				'selector' => '{{WRAPPER}} .sh_table_master table tr td:first-child',
+			]
+		);
+
+		$this->start_controls_tabs(
+			'sh_first_column_background_tabs'
+		);
+
+			$this->start_controls_tab(
+				'sh_first_column_background_normal_tab',
+				[
+					'label' => esc_html__( 'Normal', 'plugin-name' ),
+				]
+			);
+
+			$this->add_group_control(
+				\Elementor\Group_Control_Background::get_type(),
+				[
+					'name' => 'sh_normal_first_column_background',
+					'label' => esc_html__( 'First Column Background Color', 'plugin-name' ),
+					'types' => [ 'classic', 'gradient' ],
+					'selector' => '{{WRAPPER}} .sh_table_master table tr td:first-child',
+				]
+			);
+
+			$this->end_controls_tab();
+
+			$this->start_controls_tab(
+				'sh_first_column_background_hover_tab',
+				[
+					'label' => esc_html__( 'Hover', 'plugin-name' ),
+				]
+			);
+
+			$this->add_group_control(
+				\Elementor\Group_Control_Background::get_type(),
+				[
+					'name' => 'sh_first_column_hover_background',
+					'label' => esc_html__( 'First Column Background Hover Color', 'plugin-name' ),
+					'types' => [ 'classic', 'gradient' ],
+					'selector' => '{{WRAPPER}} .sh_table_master table tr td:first-child:hover',
+				]
+			);
+
+			$this->end_controls_tab();
+
+		$this->end_controls_tabs();
+
+		$this->start_controls_tabs(
+			'sh_first_column_opacity_tabs'
+		);
+
+			$this->start_controls_tab(
+				'sh_first_column_opacity_normal_tab',
+				[
+					'label' => esc_html__( 'Normal', 'plugin-name' ),
+				]
+			);
+
+			$this->add_responsive_control(
+				'sh_first_column_normal_opacity',
+				[
+					'label' => esc_html__( 'First Column Text Opacity', 'navigate-master' ),
+					'type' => \Elementor\Controls_Manager::SLIDER,
+					'size_units' => [ 'px', '%' ],
+					'range' => [
+						'px' => [
+							'min' => 0,
+							'max' => 1,
+							'step' => .1,
+						],
+					],
+					'selectors' => [
+						'{{WRAPPER}} .sh_table_master table tr td:first-child' => 'opacity: {{SIZE}};',
+					],
+				]
+			);
+	
+			$this->end_controls_tab();
+
+			$this->start_controls_tab(
+				'sh_first_column_opacity_hover_tab',
+				[
+					'label' => esc_html__( 'Hover', 'plugin-name' ),
+				]
+			);
+
+			$this->add_responsive_control(
+				'sh_first_column_hover_opacity',
+				[
+					'label' => esc_html__( 'First Column Text Opacity', 'navigate-master' ),
+					'type' => \Elementor\Controls_Manager::SLIDER,
+					'size_units' => [ 'px', '%' ],
+					'range' => [
+						'px' => [
+							'min' => 0,
+							'max' => 1,
+							'step' => .1,
+						],
+					],
+					'selectors' => [
+						'{{WRAPPER}} .sh_table_master table tr td:first-child:hover' => 'opacity: {{SIZE}};',
+					],
+				]
+			);
+	
+
+			$this->end_controls_tab();
+
+		$this->end_controls_tabs();
+
+		$this->start_controls_tabs(
+			'sh_first_column_border_tabs'
+		);
+
+			$this->start_controls_tab(
+				'sh_first_column_border_normal_tab',
+				[
+					'label' => esc_html__( 'Normal', 'plugin-name' ),
+				]
+			);
+
+			$this->add_group_control(
+				\Elementor\Group_Control_Border::get_type(),
+				[
+					'name' => 'sh_first_column_normal_border',
+					'label' => esc_html__( 'First Column Text Border', 'plugin-name' ),
+					'selector' => '{{WRAPPER}} .sh_table_master table tr td:first-child',
+				]
+			);
+
+			$this->end_controls_tab();
+
+			$this->start_controls_tab(
+				'sh_first_column_border_hover_tab',
+				[
+					'label' => esc_html__( 'Hover', 'plugin-name' ),
+				]
+			);
+
+			$this->add_group_control(
+				\Elementor\Group_Control_Border::get_type(),
+				[
+					'name' => 'sh_first_column_hover_border',
+					'label' => esc_html__( 'First Column Text Hover Border', 'plugin-name' ),
+					'selector' => '{{WRAPPER}} .sh_table_master table tr td:first-child :hover',
+				]
+			);
+
+			$this->end_controls_tab();
+
+		$this->end_controls_tabs();
+
+		$this->end_controls_section();
+
+		$this->start_controls_section(
+			'sh_file_upload',
+			[
+				'label' => esc_html__( 'Upload Excel File', 'table-master' ),
+				'tab' => \Elementor\Controls_Manager::TAB_STYLE,
+			]
+		);
+
+		$this->add_control(
+			'sh_file_upload_excel',
+			[
+				'label' => esc_html__( 'Choose File', 'plugin-name' ),
+				'type' => \Elementor\Controls_Manager::MEDIA,
+				'default' => [
+					'url' => \Elementor\Utils::get_placeholder_image_src(),
+				],
+			]
+		);
+
+		$this->end_controls_section();
+
+
 		/* ===========================
 		Style Section END Here
 		=========================== */

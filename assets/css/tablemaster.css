@@ -1,0 +1,7 @@
+.sh_table_master {
+    overflow-x: auto;
+}
+
+.sh_table_master table {
+    width : 100%;
+}
