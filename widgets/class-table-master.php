@@ -305,15 +305,6 @@ class TableMaster extends Widget_Base {
 			]
 		);
 
-		$this->add_control(
-			'more_options',
-			[
-				'label' => esc_html__( 'Heading Title Color', 'plugin-name' ),
-				'type' => \Elementor\Controls_Manager::HEADING,
-				'separator' => 'before',
-			]
-		);
-
 		$this->start_controls_tabs(
 			'sh_heading_color_tabs'
 		);
@@ -1103,7 +1094,7 @@ class TableMaster extends Widget_Base {
 		if( 'yes' == $sh_tabe_or_file ) {
 			if( !empty( $sh_details_heading_title ) && !empty( $sh_data_heading_title) ) {
 				echo "<div class='sh_table_master'>";
-					echo "<table>";
+					echo "<table cellpadding='0' cellspacing='0'>";
 						echo "<thead>";
 							echo "<tr>";
 								echo "<th>$sh_details_heading_title</th>";
