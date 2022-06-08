@@ -133,11 +133,26 @@ class TableMaster extends Widget_Base {
 		);
 
 		$this->add_control(
+			'sh_tabe_or_file',
+			[
+				'label' => esc_html__( 'Build manual table', 'plugin-name' ),
+				'type' => \Elementor\Controls_Manager::SWITCHER,
+				'label_on' => esc_html__( 'Yes', 'your-plugin' ),
+				'label_off' => esc_html__( 'No', 'your-plugin' ),
+				'return_value' => 'yes',
+				'default' => 'yes',
+			]
+		);
+
+		$this->add_control(
 			'sh_details_heading_title', [
 				'label' => esc_html__( 'Details Heading', 'table-master' ),
 				'type' => \Elementor\Controls_Manager::TEXT,
 				'default' => esc_html__( 'Details Heading Name' , 'table-master' ),
 				'label_block' => true,
+				'condition' => [
+					'sh_tabe_or_file' => 'yes',
+				],
 			]
 		);
 
@@ -147,6 +162,9 @@ class TableMaster extends Widget_Base {
 				'type' => \Elementor\Controls_Manager::TEXT,
 				'default' => esc_html__( 'Data Heading Name' , 'table-master' ),
 				'label_block' => true,
+				'condition' => [
+					'sh_tabe_or_file' => 'yes',
+				],
 			]
 		);
 
@@ -158,6 +176,9 @@ class TableMaster extends Widget_Base {
 				'type' => \Elementor\Controls_Manager::TEXT,
 				'default' => esc_html__( 'Default title name' , 'table-master' ),
 				'label_block' => true,
+				'condition' => [
+					'sh_tabe_or_file' => 'yes',
+				],
 			]
 		);
 
@@ -167,6 +188,9 @@ class TableMaster extends Widget_Base {
 				'type' => \Elementor\Controls_Manager::TEXT,
 				'default' => esc_html__( 'Data description...' , 'table-master' ),
 				'label_block' => true,
+				'condition' => [
+					'sh_tabe_or_file' => 'yes',
+				],
 			]
 		);
 		
@@ -183,10 +207,49 @@ class TableMaster extends Widget_Base {
 					],
 				],
 				'title_field' => 'Add details and data description',
+				'condition' => [
+					'sh_tabe_or_file' => 'yes',
+				],
+			]
+		);
+
+		$this->add_control(
+			'or_options',
+			[
+				'label' => esc_html__( 'Or upload files', 'plugin-name' ),
+				'type' => \Elementor\Controls_Manager::HEADING,
+				'separator' => 'before',
+				'condition' => [
+					'sh_tabe_or_file' => '',
+				],
+			]
+		);
+
+
+		$this->add_control(
+			'sh_file_upload_excel',
+			[
+				'label' => esc_html__( 'Upload Excel File', 'plugin-name' ),
+				'type' => \Elementor\Controls_Manager::MEDIA,
+				'condition' => [
+					'sh_tabe_or_file' => '',
+				],
 			]
 		);
 
 		$this->end_controls_section();
+
+		// $this->start_controls_section(
+		// 	'sh_file_upload',
+		// 	[
+		// 		'label' => esc_html__( 'Upload Excel File', 'table-master' ),
+		// 		'tab' => \Elementor\Controls_Manager::TAB_STYLE,
+		// 	]
+		// );
+
+		
+
+		// $this->end_controls_section();
 
 		/* ===========================
 		Control Section END Here
@@ -989,27 +1052,6 @@ class TableMaster extends Widget_Base {
 
 		$this->end_controls_section();
 
-		$this->start_controls_section(
-			'sh_file_upload',
-			[
-				'label' => esc_html__( 'Upload Excel File', 'table-master' ),
-				'tab' => \Elementor\Controls_Manager::TAB_STYLE,
-			]
-		);
-
-		$this->add_control(
-			'sh_file_upload_excel',
-			[
-				'label' => esc_html__( 'Choose File', 'plugin-name' ),
-				'type' => \Elementor\Controls_Manager::MEDIA,
-				'default' => [
-					'url' => \Elementor\Utils::get_placeholder_image_src(),
-				],
-			]
-		);
-
-		$this->end_controls_section();
-
 
 		/* ===========================
 		Style Section END Here
@@ -1034,19 +1076,22 @@ class TableMaster extends Widget_Base {
 
 		// echo plugin_dir_path( dirname( __FILE__ ) );
 		$excel_file = isset( $settings['sh_file_upload_excel']['url'] ) ? $settings['sh_file_upload_excel']['url'] : '';
-		if( $excel_file ) {
-			$file_id = $settings['sh_file_upload_excel']['id'];
-			$plugin_dir = WP_PLUGIN_DIR . '/table-master/';
-			require_once $plugin_dir.'lib/SimpleXLSX.php';
-			$attached_file = get_attached_file( $file_id );
-		}
 		
-
+		$sh_tabe_or_file = $settings['sh_tabe_or_file'];
 		$sh_details_heading_title = $settings['sh_details_heading_title'];
 		$sh_data_heading_title = $settings['sh_data_heading_title'];
 		$sh_table_info = $settings['sh_table_info'];
 		$sh_heading_alignment = $settings['sh_heading_alignment'];
+		$extension = '';
 
+		if( ! empty( $excel_file ) ) {
+			$file_id = $settings['sh_file_upload_excel']['id'];
+			$plugin_dir = WP_PLUGIN_DIR . '/table-master/';
+			require_once $plugin_dir.'lib/SimpleXLSX.php';
+			$attached_file = get_attached_file( $file_id );
+			$explode = explode( '.', $excel_file );
+			$extension = end( $explode );
+		}
 		?>
 		<style>
 			/* @media only screen and (max-width: 760px), (min-device-width: 768px) and (max-device-width: 1024px)  {
@@ -1055,39 +1100,8 @@ class TableMaster extends Widget_Base {
 			} */
 		</style>
 		<?php
-
-		if( !empty( $sh_details_heading_title ) && !empty( $sh_data_heading_title) ) {
-
-			if( $excel_file ) {
-				if ($xlsx = SimpleXLSX::parse( $attached_file ) ) {
-					$results = $xlsx->rows();
-					echo "<div class='sh_table_master'>";
-					echo "<table>";
-						echo "<thead>";
-							echo "<tr>";
-								foreach( $results[0] as $key => $result ) {
-									echo "<th>$result</th>";
-								}
-							echo "</tr>";
-						echo "</thead>";
-	
-						unset( $results[0] );
-						
-						echo "<tbody>";
-						foreach( $results as $key => $value ) {
-							echo "<tr>";
-								foreach( $value as $val ) {
-									echo "<td>$val</td>";
-								}	
-							echo "</tr>";
-						}
-						echo "</tbody>";
-					echo "</table>";
-					echo "</div>";
-				} else {
-					echo SimpleXLSX::parseError();
-				}
-			} else {
+		if( 'yes' == $sh_tabe_or_file ) {
+			if( !empty( $sh_details_heading_title ) && !empty( $sh_data_heading_title) ) {
 				echo "<div class='sh_table_master'>";
 					echo "<table>";
 						echo "<thead>";
@@ -1113,7 +1127,42 @@ class TableMaster extends Widget_Base {
 						echo "</tbody>";
 					echo "</table>";
 				echo "</div>";
-			}			
+			}
+		} else {
+			if( ! in_array( $extension, ['xlsx', 'xls' ] ) ) {
+				echo "<div>Please upload either xlsx or xls file.</div>";
+			} else {
+				if( !empty( $excel_file ) ) {
+					if ($xlsx = SimpleXLSX::parse( $attached_file ) ) {
+						$results = $xlsx->rows();
+						echo "<div class='sh_table_master'>";
+						echo "<table>";
+							echo "<thead>";
+								echo "<tr>";
+									foreach( $results[0] as $key => $result ) {
+										echo "<th>$result</th>";
+									}
+								echo "</tr>";
+							echo "</thead>";
+		
+							unset( $results[0] );
+							
+							echo "<tbody>";
+							foreach( $results as $key => $value ) {
+								echo "<tr>";
+									foreach( $value as $val ) {
+										echo "<td>$val</td>";
+									}	
+								echo "</tr>";
+							}
+							echo "</tbody>";
+						echo "</table>";
+						echo "</div>";
+					} else {
+						echo SimpleXLSX::parseError();
+					}
+				}
+			}
 		}
 	}
 }
