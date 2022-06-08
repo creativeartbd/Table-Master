@@ -270,6 +270,18 @@ class TableMaster extends Widget_Base {
 		);
 
 		$this->add_responsive_control(
+			'sh_heading_padding',
+			[
+				'label' => esc_html__( 'Heading Padding', 'navigate-master' ),
+				'type' => \Elementor\Controls_Manager::DIMENSIONS,
+				'size_units' => [ 'px', '%', 'em' ],
+				'selectors' => [
+					'{{WRAPPER}} .sh_table_master table thead tr th' => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+				],
+			]
+		);
+
+		$this->add_responsive_control(
 			'sh_heading_alignment',
 			[
 				'label' => esc_html__( 'Heading Alignment', 'plugin-name' ),
@@ -527,6 +539,19 @@ class TableMaster extends Widget_Base {
 				'tab' => \Elementor\Controls_Manager::TAB_STYLE,
 			]
 		);
+
+		$this->add_responsive_control(
+			'sh_body_padding',
+			[
+				'label' => esc_html__( 'Body Text Padding', 'navigate-master' ),
+				'type' => \Elementor\Controls_Manager::DIMENSIONS,
+				'size_units' => [ 'px', '%', 'em' ],
+				'selectors' => [
+					'{{WRAPPER}} .sh_table_master table tbody tr td' => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+				],
+			]
+		);
+
 
 		$this->add_responsive_control(
 			'sh_body_alignment',
@@ -789,6 +814,18 @@ class TableMaster extends Widget_Base {
 			[
 				'label' => esc_html__( 'First Column', 'table-master' ),
 				'tab' => \Elementor\Controls_Manager::TAB_STYLE,
+			]
+		);
+
+		$this->add_responsive_control(
+			'sh_first_column_padding',
+			[
+				'label' => esc_html__( 'First Column Text Padding', 'navigate-master' ),
+				'type' => \Elementor\Controls_Manager::DIMENSIONS,
+				'size_units' => [ 'px', '%', 'em' ],
+				'selectors' => [
+					'{{WRAPPER}} .sh_table_master table tbody tr td:first-child' => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+				],
 			]
 		);
 
