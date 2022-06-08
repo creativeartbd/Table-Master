@@ -1127,7 +1127,7 @@ class TableMaster extends Widget_Base {
 					if ($xlsx = SimpleXLSX::parse( $attached_file ) ) {
 						$results = $xlsx->rows();
 						echo "<div class='sh_table_master'>";
-						echo "<table>";
+						echo "<table cellpadding='0' cellspacing='0'>";
 							echo "<thead>";
 								echo "<tr>";
 									foreach( $results[0] as $key => $result ) {
