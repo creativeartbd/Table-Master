@@ -134,7 +134,7 @@ final class Table_Master {
 					),
 				)
 			),
-			'Navigate Master',
+			'Table Master',
 			'Elementor'
 		);
 	}
@@ -161,7 +161,7 @@ final class Table_Master {
 					),
 				)
 			),
-			'Navigate Master',
+			'Table Master',
 			'Elementor',
 			self::MINIMUM_ELEMENTOR_VERSION
 		);
@@ -189,7 +189,7 @@ final class Table_Master {
 					),
 				)
 			),
-			'Navigate Master',
+			'Table Master',
 			'Elementor',
 			self::MINIMUM_ELEMENTOR_VERSION
 		);
